@@ -1,0 +1,46 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2022 The Foundry Visionmongers Ltd
+
+[project]
+name = "my_asset_manager"
+version = "1.0.0"
+requires-python = ">=3.7"
+dependencies = [
+    "openassetio == 1.0.0a9"
+]
+
+authors = [
+  { name = "MyName", email = "myemail@myserver.com" }
+]
+
+description = """\
+An openassetio compliant asset manager implemented in python\
+"""
+keywords = ["openassetio", "manager"]
+readme = "README.md"
+
+
+# Defines a Python entry point that exposes the plugin's package to
+# allow entry point based discovery.
+[project.entry-points."openassetio.manager_plugin"]
+plugin_package_or_module = "my_asset_manager"
+
+[build-system]
+requires = [
+    "setuptools>=65.5.0"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where =["plugin"]
+
+[tool.pylint.format]
+max-line-length = 99
+
+[tool.black]
+line-length = 99
+
+# NB: This requires the use of pyproject-flake8
+[tool.flake8]
+max-line-length = 99
+extend-ignore = "E266,"
