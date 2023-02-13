@@ -20,13 +20,7 @@ MyAssetManager behaves with the correct business logic.
 
 # pylint: disable=invalid-name, missing-function-docstring, missing-class-docstring
 
-import operator
-import os
-
-from unittest import mock
-
 from openassetio import Context, TraitsData
-from openassetio.exceptions import PluginError
 from openassetio.test.manager.harness import FixtureAugmentedTestCase
 
 
@@ -69,7 +63,7 @@ class Test_resolve(FixtureAugmentedTestCase):
 
         self.assertTrue(len(result) == 1)
         # Check all traits are present, and their properties.
-        for trait in self.__test_entity[1].keys():
+        for trait in self.__test_entity[1]:
             self.assertTrue(result[0].hasTrait(trait))
             for property_, value in self.__test_entity[1][trait].items():
                 self.assertEqual(result[0].getTraitProperty(trait, property_), value)

@@ -19,11 +19,11 @@ Manager test harness test case fixtures for My Asset Manager.
 from openassetio.constants import kField_EntityReferencesMatchPrefix
 
 
-kIdentifier = "myorg.manager.my_asset_manager"
+KIDENTIFIER = "myorg.manager.my_asset_manager"
 
 fixtures = {
-    "identifier": kIdentifier,
-    "Test_identifier": {"test_matches_fixture": {"identifier": kIdentifier}},
+    "identifier": KIDENTIFIER,
+    "Test_identifier": {"test_matches_fixture": {"identifier": KIDENTIFIER}},
     "Test_displayName": {"test_matches_fixture": {"display_name": "My Asset Manager"}},
     "Test_info": {
         "test_matches_fixture": {

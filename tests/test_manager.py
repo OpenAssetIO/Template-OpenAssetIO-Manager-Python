@@ -61,7 +61,7 @@ class Test_MyAssetManager:
         assert harness.executeSuite(my_asset_manager_business_logic_suite, harness_fixtures)
 
 
-class Test_MyAssetManager_Plugin:
+class Test_MyAssetManager_Plugin:  # pylint: disable=too-few-public-methods
     def test_exposes_plugin_attribute_with_correct_type(self):
         import my_asset_manager  # pylint: disable=import-outside-toplevel
 
