@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2023 The Foundry Visionmongers Ltd
+
 name: Code quality
 on: pull_request
 
@@ -16,11 +19,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install .
+          python -m pip install pylint==2.15.5
       - name: Lint
         uses: TheFoundryVisionmongers/fn-pylint-action@v1.1
         with:
+          pylint-disable: fixme # We track 'todo's through other means
           pylint-rcfile: "./pyproject.toml"
-          pylint-paths: "plugin tests"
+          pylint-paths: >
+            plugin
+            tests
 
   black:
     runs-on: ubuntu-latest

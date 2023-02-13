@@ -1,5 +1,5 @@
 #
-#   Copyright 2013-2021 [The Foundry Visionmongers Ltd]
+#   Copyright 2013-2023 [The Foundry Visionmongers Ltd]
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -15,22 +15,7 @@
 #
 
 """
-The MyAssetManager provides a working example of a primitive
-asset management system, exposed through an OpenAssetIO
-PythonPluginSystemManagerPlugin.
-
-It aims to demonstrate a canonical binding of a manager to the
-OpenAssetIO API.
-
-The actual inner workings and approach of the manager itself should
-be taken with a pinch of salt though, and not used as a reference
-for "how to build an asset management system". It is a minimal
-implementation that serves the needs of the API for testing and
-the purposes of exploring host workflows.
-
-This package should be placed on $OPENASSETIO_PLUGIN_PATH. This does not
-need to be on `$PYTHONPATH` directly, the plugin system takes care
-of extending Python's runtime paths accordingly.
+Module Documentation for MyAssetManager here.
 """
 
 # pylint: disable=import-outside-toplevel
@@ -54,7 +39,7 @@ class MyAssetManagerPlugin(PythonPluginSystemManagerPlugin):
     def identifier():
         # The identifier here _must_ be the same as the one returned by
         # the interface implementation for it's `identifier` method.
-        return "myorg.manager.myassetmanager"
+        return "myorg.manager.my_asset_manager"
 
     @classmethod
     def interface(cls):
@@ -63,7 +48,7 @@ class MyAssetManagerPlugin(PythonPluginSystemManagerPlugin):
         # Note that it should always be light-weight to construct
         # instances of the ManagerInterface class. See the notes under
         # the "Initialization" section of:
-        #   https://thefoundryvisionmongers.github.io/OpenAssetIO/classopenassetio_1_1manager_a_p_i_1_1_manager_interface_1_1_manager_interface.html#details (pylint: disable=line-too-long)
+        # https://openassetio.github.io/OpenAssetIO/classopenassetio_1_1v1_1_1manager_api_1_1_manager_interface.html#details (pylint: disable=line-too-long)
         return MyAssetManagerInterface()
 
 

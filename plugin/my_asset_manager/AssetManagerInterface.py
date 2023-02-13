@@ -1,5 +1,5 @@
 #
-#   Copyright 2013-2021 [The Foundry Visionmongers Ltd]
+#   Copyright 2013-20213[The Foundry Visionmongers Ltd]
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -13,44 +13,40 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
+# pylint: disable=invalid-name
 """
 A single-class module, providing the MyAssetManagerInterface class.
-
-The manager currently ignores all entity types.
+This is the entry-point for the logic of your asset manager.
 """
 
 # Note that it should always be light-weight to construct instances of
 # the this class. See the notes under the "Initialization" section of:
-#   https://openassetio.github.io/OpenAssetIO/classopenassetio_1_1manager_a_p_i_1_1_manager_interface_1_1_manager_interface.html#details (pylint: disable=line-too-long)
+# https://openassetio.github.io/OpenAssetIO/classopenassetio_1_1v1_1_1manager_api_1_1_manager_interface.html#details (pylint: disable=line-too-long)
 # As such, any expensive module imports should be deferred.
 from openassetio import constants, BatchElementError, TraitsData
 from openassetio.managerApi import ManagerInterface
 
-
-__all__ = [
-    "MyAssetManagerInterface",
-]
-
-
-# TODO(TC): @pylint-disable
-# As we are building out the implementation vertically, we have known
-# fails for missing abstract methods.
+# OpenAssetIO is building out the implementation vertically, there are
+# known fails for missing abstract methods.
 # pylint: disable=abstract-method
+# Methods in C++ end up with "missing docstring"
+# pylint: disable=missing-docstring
+# pylint: disable=too-many-arguments, unused-argument
 
 
 class MyAssetManagerInterface(ManagerInterface):
     """
-    Binds MyAssetManager to the OpenAssetIO ManagerInterface.
-
-    This class contains none of the actual business logic implementing
-    asset management, just bindings to the OpenAssetIO interface
-    methods.
+    Implement the OpenAssetIO ManagerInterface.
+    https://openassetio.github.io/OpenAssetIO/classopenassetio_1_1manager_api_1_1_manager_interface_1_1_manager_interface.html
     """
 
+    # Entity references provided to this asset manager should be
+    # prefixed with this string to be considered valid.
+    # eg. "my_asset_manager:///my_entity_id"
     __reference_prefix = "my_asset_manager:///"
 
     def identifier(self):
-        return "myorg.manager.myassetmanager"
+        return "myorg.manager.my_asset_manager"
 
     def initialize(self, managerSettings, hostSession):
         pass

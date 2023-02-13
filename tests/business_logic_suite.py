@@ -32,7 +32,11 @@ from openassetio.test.manager.harness import FixtureAugmentedTestCase
 
 class Test_resolve(FixtureAugmentedTestCase):
     """
-    Tests that resolution returns the expected values.
+    Test suite for the business logic of MyAssetManager
+
+    The test here is illustrative only, you should extend this suite
+    to provide full coverage of all of the behaviour of your asset
+    manager.
     """
 
     __test_entity = (
