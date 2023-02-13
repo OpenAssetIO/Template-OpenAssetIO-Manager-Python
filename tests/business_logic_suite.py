@@ -20,7 +20,7 @@ MyAssetManager behaves with the correct business logic.
 
 # pylint: disable=invalid-name, missing-function-docstring, missing-class-docstring
 
-from openassetio import Context, TraitsData
+from openassetio import Context
 from openassetio.test.manager.harness import FixtureAugmentedTestCase
 
 
