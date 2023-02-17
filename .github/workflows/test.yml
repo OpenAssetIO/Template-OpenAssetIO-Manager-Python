@@ -1,0 +1,45 @@
+# Runs pytest on the matrix of supported platforms any Python versions.
+name: Test
+on:
+  pull_request:
+
+jobs:
+  # You may remove this test, this merely assures that the template
+  # works when you find-and-replace the MyAssetManager strings.
+  test_project_rename:
+    name: Project Rename
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - run: |
+          grep -RIl 'MyAssetManager' | xargs sed -i 's/MyAssetManager/RenamedAssetManager/g'
+          grep -RIl 'my_asset_manager' | xargs sed -i 's/my_asset_manager/renamed_asset_manager/g'
+          grep -RIl 'My Asset Manager' | xargs sed -i 's/My Asset Manager/Renamed Asset Manager/g'
+          grep -RIl 'myorg' | xargs sed -i 's/myorg/renamedorg/g'
+          mv plugin/my_asset_manager/MyAssetManagerInterface.py \
+            plugin/my_asset_manager/RenamedAssetManagerInterface.py
+          mv plugin/my_asset_manager plugin/renamed_asset_manager
+          python -m pip install .
+          python -m pip install -r tests/requirements.txt
+          python -m pytest -v ./tests
+
+  test:
+    name: ${{ matrix.os }} ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        python: ["3.7", "3.9", "3.10"]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+      - run: |
+          python -m pip install .
+          python -m pip install -r tests/requirements.txt
+          python -m pytest -v ./tests
