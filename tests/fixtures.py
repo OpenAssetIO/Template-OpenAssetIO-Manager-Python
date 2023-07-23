@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright 2023 The Foundry Visionmongers Ltd
+
 """
 Manager test harness test case fixtures for My Asset Manager.
 """

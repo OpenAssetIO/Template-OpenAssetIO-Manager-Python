@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright 2023 The Foundry Visionmongers Ltd
+
 # pylint: disable=invalid-name
 """
 A single-class module, providing the MyAssetManagerInterface class.
