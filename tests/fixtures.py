@@ -30,19 +30,21 @@ fixtures = {
     "Test_displayName": {"test_matches_fixture": {"display_name": "My Asset Manager"}},
     "Test_info": {
         "test_matches_fixture": {
-            "info": {constants.kField_EntityReferencesMatchPrefix: "my_asset_manager:///"}
+            "info": {constants.kInfoKey_EntityReferencesMatchPrefix: "my_asset_manager:///"}
         }
     },
     "Test_resolve": {
-        "a_reference_to_a_readable_entity": EXISTING_REF,
-        "a_set_of_valid_traits": {LocatableContentTrait.kId},
-        "a_reference_to_a_readonly_entity": EXISTING_REF,
-        "the_error_string_for_a_reference_to_a_readonly_entity": "Entities are read-only",
-        "a_reference_to_a_missing_entity": "my_asset_manager:///missing_entity",
-        "the_error_string_for_a_reference_to_a_missing_entity": (
-            "Entity 'my_asset_manager:///missing_entity' not found"
-        ),
-        "a_malformed_reference": MALFORMED_REF,
-        "the_error_string_for_a_malformed_reference": "Entity identifier is malformed",
+        "shared": {
+            "a_reference_to_a_readable_entity": EXISTING_REF,
+            "a_set_of_valid_traits": {LocatableContentTrait.kId},
+            "a_reference_to_a_readonly_entity": EXISTING_REF,
+            "the_error_string_for_a_reference_to_a_readonly_entity": "Entities are read-only",
+            "a_reference_to_a_missing_entity": "my_asset_manager:///missing_entity",
+            "the_error_string_for_a_reference_to_a_missing_entity": (
+                "Entity 'my_asset_manager:///missing_entity' not found"
+            ),
+            "a_malformed_reference": MALFORMED_REF,
+            "the_error_string_for_a_malformed_reference": "Entity identifier is malformed",
+        }
     },
 }
