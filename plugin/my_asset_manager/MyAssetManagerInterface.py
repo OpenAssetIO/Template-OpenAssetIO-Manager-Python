@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright 2023 The Foundry Visionmongers Ltd
+
 # pylint: disable=invalid-name
 """
 A single-class module, providing the MyAssetManagerInterface class.
@@ -56,7 +59,7 @@ class MyAssetManagerInterface(ManagerInterface):
         # kind of matching, you should set this key. It allows for
         # multi-threaded reference testing in C++ as it avoids the need
         # to acquire the GIL and enter Python.
-        return {constants.kField_EntityReferencesMatchPrefix: self.__reference_prefix}
+        return {constants.kInfoKey_EntityReferencesMatchPrefix: self.__reference_prefix}
 
     def managementPolicy(self, traitSets, context, hostSession):
         # The management policy defines which traits the manager is

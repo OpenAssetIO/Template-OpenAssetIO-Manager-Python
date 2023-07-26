@@ -1,7 +1,10 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright 2023 The Foundry Visionmongers Ltd
+
 """
 Manager test harness test case fixtures for My Asset Manager.
 """
-from openassetio.constants import kField_EntityReferencesMatchPrefix
+from openassetio import constants
 from openassetio_mediacreation.traits.content import LocatableContentTrait
 
 
@@ -22,13 +25,12 @@ fixtures = {
     "shared": {
         "a_valid_reference": VALID_REF,
         "an_invalid_reference": NON_REF,
-        "a_malformed_reference": MALFORMED_REF,
     },
     "Test_identifier": {"test_matches_fixture": {"identifier": IDENTIFIER}},
     "Test_displayName": {"test_matches_fixture": {"display_name": "My Asset Manager"}},
     "Test_info": {
         "test_matches_fixture": {
-            "info": {kField_EntityReferencesMatchPrefix: "my_asset_manager:///"}
+            "info": {constants.kInfoKey_EntityReferencesMatchPrefix: "my_asset_manager:///"}
         }
     },
     "Test_resolve": {

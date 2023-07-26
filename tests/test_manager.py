@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright 2023 The Foundry Visionmongers Ltd
+
 """
 Test cases for MyAssetManager that make use of the OpenAssetIO
 manager test harness.

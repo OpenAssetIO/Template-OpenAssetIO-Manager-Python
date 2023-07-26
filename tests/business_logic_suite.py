@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright 2023 The Foundry Visionmongers Ltd
+
 """
 A manager test harness test case suite that validates that
 MyAssetManager behaves with the correct business logic.
