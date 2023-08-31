@@ -12,6 +12,7 @@ This is the entry-point for the logic of your asset manager.
 # https://openassetio.github.io/OpenAssetIO/classopenassetio_1_1v1_1_1manager_api_1_1_manager_interface.html#details (pylint: disable=line-too-long)
 # As such, any expensive module imports should be deferred.
 from openassetio import constants, BatchElementError, TraitsData
+from openassetio.access import PolicyAccess, ResolveAccess
 from openassetio.managerApi import ManagerInterface
 from openassetio_mediacreation.traits.content import LocatableContentTrait
 from openassetio_mediacreation.traits.managementPolicy import ManagedTrait
@@ -61,24 +62,24 @@ class MyAssetManagerInterface(ManagerInterface):
         # to acquire the GIL and enter Python.
         return {constants.kInfoKey_EntityReferencesMatchPrefix: self.__reference_prefix}
 
-    def managementPolicy(self, traitSets, context, hostSession):
+    def managementPolicy(self, traitSets, policyAccess, context, hostSession):
         # The management policy defines which traits the manager is
-        # capable of imbuing queried traitSets with. In this case, we
-        # manage locations of assets only, and only in a read, not a
-        # write, context. Note `LocatableContentTrait` is a trait from
-        # the openassetio-mediacreation library, see :
+        # capable of imbuing queried traitSets with. In this case, the
+        # manager allows read access to the locations of assets.
+        # Note `LocatableContentTrait` is a trait
+        # from the openassetio-mediacreation library, see :
         # https://github.com/OpenAssetIO/OpenAssetIO-MediaCreation
         policies = []
         for traitSet in traitSets:
             policy = TraitsData()
-            # The host asks specifically if a sets of traits are
-            # supported In this case, if any of the input traitSets are
+            # The host asks specifically if sets of traits are
+            # supported. In this case, if any of the input traitSets are
             # for read, and contain LocatableContent, as we can supply
             # data for that trait, we imbue a managed policy response,
             # as well as the traits we are able to supply data for. It's
             # important to get this right, for more info, see:
-            # https://openassetio.github.io/OpenAssetIO/classopenassetio_1_1v1_1_1host_api_1_1_manager.html#acdf7d0c3cef98cce7abaf8fb5f004354
-            if context.isForRead() and LocatableContentTrait.kId in traitSet:
+            # https://openassetio.github.io/OpenAssetIO/classopenassetio_1_1v1_1_1manager_api_1_1_manager_interface.html#ab86b5623a355d04086bae76875ebee17
+            if policyAccess == PolicyAccess.kRead and LocatableContentTrait.kId in traitSet:
                 ManagedTrait.imbueTo(policy)
                 LocatableContentTrait.imbueTo(policy)
 
@@ -102,11 +103,19 @@ class MyAssetManagerInterface(ManagerInterface):
         return someString.startswith(self.__reference_prefix)
 
     def resolve(
-        self, entityReferences, traitSet, context, hostSession, successCallback, errorCallback
+        self,
+        entityReferences,
+        traitSet,
+        resolveAccess,
+        context,
+        hostSession,
+        successCallback,
+        errorCallback,
     ):
+        # pylint: disable=too-many-locals
         # If your resolver doesn't support write, like this one, reject
-        # a write context via calling the error callback.
-        if context.isForWrite():
+        # a write access mode via calling the error callback.
+        if resolveAccess != ResolveAccess.kRead:
             result = BatchElementError(
                 BatchElementError.ErrorCode.kEntityAccessError, "Entities are read-only"
             )

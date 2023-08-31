@@ -8,7 +8,7 @@ MyAssetManager behaves with the correct business logic.
 
 # pylint: disable=invalid-name, missing-function-docstring, missing-class-docstring
 
-from openassetio import Context
+from openassetio.access import ResolveAccess
 from openassetio.test.manager.harness import FixtureAugmentedTestCase
 from openassetio_mediacreation.traits.content import LocatableContentTrait
 
@@ -34,7 +34,7 @@ class Test_resolve(FixtureAugmentedTestCase):
         entity_reference = self._manager.createEntityReference(ref_str)
 
         trait_set = {LocatableContentTrait.kId}
-        context = self.createTestContext(access=Context.Access.kRead)
+        context = self.createTestContext()
 
         result = [None]
 
@@ -47,7 +47,9 @@ class Test_resolve(FixtureAugmentedTestCase):
                 f" {batchElementError.message}"
             )
 
-        self._manager.resolve([entity_reference], trait_set, context, success_cb, error_cb)
+        self._manager.resolve(
+            [entity_reference], trait_set, ResolveAccess.kRead, context, success_cb, error_cb
+        )
 
         self.assertTrue(len(result) == 1)
         # Check all traits are present, and their properties.
