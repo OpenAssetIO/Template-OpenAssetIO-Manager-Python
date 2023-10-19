@@ -11,7 +11,13 @@ This is the entry-point for the logic of your asset manager.
 # the this class. See the notes under the "Initialization" section of:
 # https://openassetio.github.io/OpenAssetIO/classopenassetio_1_1v1_1_1manager_api_1_1_manager_interface.html#details (pylint: disable=line-too-long)
 # As such, any expensive module imports should be deferred.
-from openassetio import constants, BatchElementError, TraitsData
+from openassetio import constants, TraitsData, BatchElementError
+
+# TraitsData and BatchElementError got moved with a deprecation. If you
+# don't need to support versions prior to beta 1.0, you should use the
+# below two imports instead.
+# from openassetio.traits import TraitsData
+# from openassetio.errors import BatchElementError
 from openassetio.access import PolicyAccess, ResolveAccess
 from openassetio.managerApi import ManagerInterface
 from openassetio_mediacreation.traits.content import LocatableContentTrait
@@ -52,6 +58,19 @@ class MyAssetManagerInterface(ManagerInterface):
 
     def displayName(self):
         return "My Asset Manager"
+
+    def hasCapability(self, capability):
+        # Declare what sort of capabilities your manger fulfils.
+        # EntityReferenceIdentification and ManagementPolicyQueries
+        # are mandatory.
+        if capability in (
+            ManagerInterface.Capability.kEntityReferenceIdentification,
+            ManagerInterface.Capability.kManagementPolicyQueries,
+            ManagerInterface.Capability.kResolution,
+        ):
+            return True
+
+        return False
 
     def info(self):
         # This hint allows the API middleware to short-circuit calls to
