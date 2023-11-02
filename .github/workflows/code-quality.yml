@@ -18,7 +18,7 @@ jobs:
           python -m pip install .
           python -m pip install -r tests/requirements.txt
       - name: Lint
-        uses: TheFoundryVisionmongers/fn-pylint-action@v1.1
+        uses: TheFoundryVisionmongers/fn-pylint-action@v2.0
         with:
           pylint-rcfile: "./pyproject.toml"
           pylint-paths: >
