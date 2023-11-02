@@ -6,7 +6,7 @@ name = "my_asset_manager"
 version = "1.0.0"
 requires-python = ">=3.7"
 dependencies = [
-    "openassetio == 1.0.0a14",
+    "openassetio >= 1.0.0a14",
     "openassetio-mediacreation == 1.0.0a7"
 ]
 
