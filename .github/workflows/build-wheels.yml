@@ -33,7 +33,7 @@ jobs:
       - name: Build wheels
         run: pip wheel --no-deps --wheel-dir wheelhouse .
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: my_asset_manager_wheels
           path: ./wheelhouse/*.whl
