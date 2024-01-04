@@ -14,6 +14,8 @@ Once you have cloned the repository, you'll want to rename the template.
 The template uses placeholder strings, (eg: "MyAssetManager") throughout
 to facilitate easy replacement.
 
+Pointless Change
+
 Firstly, rename the directory
 
 ```bash
