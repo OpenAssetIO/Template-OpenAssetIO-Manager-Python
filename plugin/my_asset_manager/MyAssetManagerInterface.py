@@ -18,10 +18,12 @@ from openassetio import constants, TraitsData, BatchElementError
 # below two imports instead.
 # from openassetio.traits import TraitsData
 # from openassetio.errors import BatchElementError
-from openassetio.access import PolicyAccess, ResolveAccess
+from openassetio.access import PolicyAccess, ResolveAccess, EntityTraitsAccess
 from openassetio.managerApi import ManagerInterface
 from openassetio_mediacreation.traits.content import LocatableContentTrait
 from openassetio_mediacreation.traits.managementPolicy import ManagedTrait
+from openassetio_mediacreation.traits.application import ConfigTrait
+from openassetio_mediacreation.traits.usage import EntityTrait
 
 # OpenAssetIO is building out the implementation vertically, there are
 # known fails for missing abstract methods.
@@ -67,6 +69,7 @@ class MyAssetManagerInterface(ManagerInterface):
             ManagerInterface.Capability.kEntityReferenceIdentification,
             ManagerInterface.Capability.kManagementPolicyQueries,
             ManagerInterface.Capability.kResolution,
+            ManagerInterface.Capability.kEntityTraitIntrospection,
         ):
             return True
 
@@ -120,6 +123,90 @@ class MyAssetManagerInterface(ManagerInterface):
         # allows OpenAssetIO some room to perform optimizations. See
         # info()
         return someString.startswith(self.__reference_prefix)
+
+    def entityTraits(
+        self,
+        entityReferences,
+        entityTraitsAccess,
+        context,
+        _hostSession,
+        successCallback,
+        errorCallback,
+    ):
+        # This function is used by the host to retrieve the trait sets
+        # for specific entities. The behaviour of this function differs
+        # per access mode. `kRead` is a request for an exhaustive trait
+        # set for an entity according to this manager, whilst `kWrite`
+        # is a request for the minimal trait set required to publish to
+        # that entity. As this manager example is read-only, we will
+        # simply reject any `kWrite` requests.
+
+        # For the purposes of this template, we use this fake map of
+        # traits to serve as our "database", arbitrarily assuming that
+        # asset 2 is a config entity of some sort.
+        # Replace this with querying your backend systems.
+        managed_assets_map = {
+            "my_asset_manager:///anAsset": {EntityTrait.kId, LocatableContentTrait.kId},
+            "my_asset_manager:///anAsset2": {
+                EntityTrait.kId,
+                LocatableContentTrait.kId,
+                ConfigTrait.kId,
+            },
+            "my_asset_manager:///anAsset3": {EntityTrait.kId, LocatableContentTrait.kId},
+        }
+
+        # If your manager doesn't support write, like this one, reject
+        # a write access mode via calling the error callback.
+        if entityTraitsAccess != EntityTraitsAccess.kRead:
+            result = BatchElementError(
+                BatchElementError.ErrorCode.kEntityAccessError, "Entities are read-only"
+            )
+            for idx in range(len(entityReferences)):
+                errorCallback(idx, result)
+            return
+
+        # Iterate over all the entity references, calling the correct
+        # error/success callbacks into the host.
+        # You should handle success/failure on an entity-by-entity
+        # basis, do not abort your entire operation because any single
+        # entity is malformed/can't be processed for any reason, use
+        # the error callback and continue.
+        for idx, ref in enumerate(entityReferences):
+            # It may be that one of the references you are provided is
+            # recognized for this manager, but has some syntax error or
+            # is otherwise incorrect for your specific resolve context.
+            # For example, an asset reference that specifies a version
+            # for an un-versioned entity could be considered malformed.
+            #
+            # N.B. It's not required to perform an explicit check here
+            # if this is naturally serviced during your backend lookup,
+            # the key is not to error the whole batch, but use the error
+            # callback for relevant references.
+            identifier_is_malformed = is_malformed_ref(ref)
+            if identifier_is_malformed:
+                error_result = BatchElementError(
+                    BatchElementError.ErrorCode.kMalformedEntityReference,
+                    "Entity identifier is malformed",
+                )
+                errorCallback(idx, error_result)
+            else:
+                # If our manager has the asset in question, we can
+                # let the host know which traits make up this specific
+                # entity.
+                if ref.toString() in managed_assets_map:
+                    # Return the traits imbued the the entity in
+                    # question
+                    success_result = managed_assets_map[ref.toString()]
+                    successCallback(idx, success_result)
+                else:
+                    # Otherwise, we don't know about the entity, so call
+                    # the error callback with an entity resolution error
+                    # for this specific entity.
+                    error_result = BatchElementError(
+                        BatchElementError.ErrorCode.kEntityResolutionError,
+                        f"Entity '{ref.toString()}' not found",
+                    )
+                    errorCallback(idx, error_result)
 
     def resolve(
         self,
@@ -208,11 +295,11 @@ class MyAssetManagerInterface(ManagerInterface):
                     errorCallback(idx, error_result)
 
 
-# Internal function used in Resolve, replace with logic based on what a
-# malformed ref means in your backend. For the demonstrative purposes of
-# this template, we pretend to support query parameters, then invent a
-# completely arbitrary query parameter that we don't support. (We then
-# test our implementation using the api compliance suite, see
-# fixtures.py)
+# Internal function used in Resolve and EntityTraits, replace with logic
+# based on what a malformed ref means in your backend. For the
+# demonstrative purposes of this template, we pretend to support query
+# parameters, then invent a completely arbitrary query parameter that we
+# don't support. (We then test our implementation using the api
+# compliance suite, see fixtures.py)
 def is_malformed_ref(entityReference):
     return "?unsupportedQueryParam" in entityReference.toString()
