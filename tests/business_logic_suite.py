@@ -8,14 +8,15 @@ MyAssetManager behaves with the correct business logic.
 
 # pylint: disable=invalid-name, missing-function-docstring, missing-class-docstring
 
-from openassetio.access import ResolveAccess
+from openassetio.access import ResolveAccess, EntityTraitsAccess
 from openassetio.test.manager.harness import FixtureAugmentedTestCase
 from openassetio_mediacreation.traits.content import LocatableContentTrait
+from openassetio_mediacreation.traits.usage import EntityTrait
 
 
 class Test_resolve(FixtureAugmentedTestCase):
     """
-    Test suite for the business logic of MyAssetManager
+    Test suite for the Resolve business logic of MyAssetManager
 
     The test here is illustrative only, you should extend this suite
     to provide full coverage of all of the behaviour of your asset
@@ -57,3 +58,38 @@ class Test_resolve(FixtureAugmentedTestCase):
             self.assertTrue(result[0].hasTrait(trait))
             for property_, value in self.__test_entity[1][trait].items():
                 self.assertEqual(result[0].getTraitProperty(trait, property_), value)
+
+
+class Test_entityTraits(FixtureAugmentedTestCase):
+    """
+    Test suite for the EntityTraits business logic of MyAssetManager
+
+    The test here is illustrative only, you should extend this suite
+    to provide full coverage of all of the behaviour of your asset
+    manager.
+    """
+
+    def test_when_refs_found_then_success_callback_called_with_expected_values(self):
+        entity_reference = self._manager.createEntityReference("my_asset_manager:///anAsset")
+
+        context = self.createTestContext()
+
+        results = [None]
+
+        def success_cb(idx, trait_set):
+            print("Success", trait_set)
+            results[idx] = trait_set
+
+        def error_cb(idx, batchElementError):
+            self.fail(
+                f"Unexpected error for '{entity_reference.toString()}':"
+                f" {batchElementError.message}"
+            )
+
+        self._manager.entityTraits(
+            [entity_reference], EntityTraitsAccess.kRead, context, success_cb, error_cb
+        )
+
+        self.assertTrue(len(results) == 1)
+        expected_trait_set = {EntityTrait.kId, LocatableContentTrait.kId}
+        assert results[0] == expected_trait_set

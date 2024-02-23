@@ -143,18 +143,18 @@ Test directory, assumes a `pytest` testing environment. Uses the
 harness](https://openassetio.github.io/OpenAssetIO/testing.html#testing_manager_plugins)
 to run apiCompliance checks, as well as business logic tests.
 
-- [`business_logic_suite.py`](test/business_logic_suite.py): Tests for
+- [`business_logic_suite.py`](tests/business_logic_suite.py): Tests for
 the behaviour of the manager. Does it resolve assets correctly, etc.
 Invoked from `tests.py`
-- [`conftest.py`](test/conftest.py): Pytest fixtures necessary for
+- [`conftest.py`](tests/conftest.py): Pytest fixtures necessary for
   running the tests.
-- [`fixtures.py`](test/fixtures.py): Data concerning the manager
+- [`fixtures.py`](tests/fixtures.py): Data concerning the manager
 necessary to run the test harness. See [the
 documentation.](https://openassetio.github.io/OpenAssetIO/testing.html#testing_manager_plugins_fixtures)
-- [`requirements.txt`](test/requirements.txt): Requirements necessary to
+- [`requirements.txt`](tests/requirements.txt): Requirements necessary to
 run the tests. Generally installed with `python -m pip install -r
 tests/requirements.txt` from the root directory.
-- [`tests.py`](test/tests.py): Main test entry point. Executes the
+- [`test_manager.py`](tests/test_manager.py): Main test entry point. Executes the
  manager `business_logic_suite`, as well as [OpenAssetIOs
  apiComplianceSuite.](https://github.com/OpenAssetIO/OpenAssetIO/blob/main/src/openassetio-python/package/openassetio/test/manager/apiComplianceSuite.py)
 
