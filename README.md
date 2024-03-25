@@ -5,6 +5,8 @@ manager plugin template.
 
 This template has been written so that it works "out of the box",
 including test and lint infrastructure, integrated with github actions.
+It is intended to be a starting point for manager implementors, as well
+as a well documented example of a basic manager implementation.
 
 ## Using the template
 
