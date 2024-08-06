@@ -32,7 +32,7 @@ from openassetio_mediacreation.traits.usage import EntityTrait
 class MyAssetManagerInterface(ManagerInterface):
     """
     Implement the OpenAssetIO ManagerInterface.
-    https://openassetio.github.io/OpenAssetIO/classopenassetio_1_1manager_api_1_1_manager_interface_1_1_manager_interface.html
+    https://openassetio.github.io/OpenAssetIO/classopenassetio_1_1v1_1_1manager_api_1_1_manager_interface.html
     """
 
     # Entity references provided to this asset manager should be
