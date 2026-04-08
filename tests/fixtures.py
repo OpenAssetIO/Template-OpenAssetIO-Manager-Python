@@ -4,6 +4,7 @@
 """
 Manager test harness test case fixtures for My Asset Manager.
 """
+
 from openassetio import constants
 from openassetio_mediacreation.traits.content import LocatableContentTrait
 from openassetio_mediacreation.traits.application import ConfigTrait
